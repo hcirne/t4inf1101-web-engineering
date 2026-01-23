@@ -1,7 +1,6 @@
 ---
 # Document layout
-papersize: a4
-fontsize: 11pt
+flontsize: 11pt
 linestretch: 1.3
 geometry:
   - margin=2.5cm
@@ -34,8 +33,8 @@ It defines the website’s purpose and goals, breaks each goal into actionable s
 The website's purpose is to provide a platform for employers and job-seekers to
 connect and facilitate the hiring process.
 
-- **Target audience:** employers and job-seeking individuals;
-- **Problem or need addressed:** lack of transparency and friction before the hiring process;
+- **Target audience:** employers and job seeking individuals;
+- **Problem or need addressed:** lack of transparency and friction in the hiring process;
 - **Main purpose of the website:** to streamline the hiring process by making it easier for employers and job seekers to find the right fit.
 
 ### 2.2 Website Goals
@@ -68,7 +67,7 @@ List the main goals of the website.
 - Implement search filters;
 - Add job recommendations (based on skills, location, preferences, ...);
   - _Note: AI could be a useful technology here._
-- Implement feature to save jobs (later application);
+- Implement feature to save jobs (later application).
 
 ### Goal 4: _improve communication and follow-ups_
 - Add in-platform messaging; 
@@ -91,35 +90,33 @@ List the main goals of the website.
 - Home
   - About;
   - Jobs;
-  - Employers:
+  - Employers page:
     - Employer dashboard;
-    - Publish a job;
-    - Manage jobs;
-    - Applications.
-  - Job seekers:
-    - Job seeker dashboard;
-    - Profile;
-    - Saved jobs;
-    - Applications.
-  - Login;
+    - Jobs;
+      - Publish a job;
+      - Manage jobs;
+      - Applications.
+    - Profile. 
+  - Job seekers page:
+    - Job seeker dashboard
+    - Jobs;
+      - Saved jobs;
+      - Applications.
+    - Profile.
   - Register:
-    - Employer registarion;
+    - Employer registration;
     - Job seeker registration.
+
+\pagebreak
 
 ## 5. Wireframes
 
-### Home Page Wireframe
-_Insert wireframe image here_
+![Home Page Wireframe](./wireframes/Home.png)
 
-**Key elements:**
-- Header and navigation
-- Main content area
-- Footer
+![About Page Wireframe](./wireframes/About.png)
 
+![Jobs Page Wireframe](./wireframes/Jobs.png)
 
-### Page Name Wireframe
-_Insert wireframe image here_
+![Job Seeker/Employer Page Wireframe](./wireframes/Job_Employer.png)
 
-**Key elements:**
-- Section descriptions
-- Layout explanation
+![Registration Page Wireframe](./wireframes/Register.png)
