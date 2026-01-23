@@ -1,6 +1,6 @@
 ---
 # Document layout
-flontsize: 11pt
+fontsize: 11pt
 linestretch: 1.3
 geometry:
   - margin=2.5cm
