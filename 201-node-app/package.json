@@ -1,0 +1,24 @@
+{
+  "name": "201-node-app",
+  "version": "1.0.0",
+  "description": "first assignment for web engineering class",
+  "homepage": "https://github.com/hcirne/t4inf1101-web-engineering#readme",
+  "bugs": {
+    "url": "https://github.com/hcirne/t4inf1101-web-engineering/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hcirne/t4inf1101-web-engineering.git"
+  },
+  "license": "ISC",
+  "author": "hcirne",
+  "type": "commonjs",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon main.js"
+  },
+  "dependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
