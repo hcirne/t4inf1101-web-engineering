@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit To-do</title>
+    <title>Edit To-Do</title>
 </head>
 <body>
     <form action="/edit/<%= todo.id %>" method="POST">
-        <b>ID: <%= todo.id %></b>
-        <p>Title</p>
-        <input type ="text" name="title" placeholder="<%= todo.title %>" required>
-        <p>Description</p>
-        <input type ="text" name="description" placeholder="<%= todo.description %>" required>
+        <h2>ID: <%= todo.id %></h2>
+        <label for="title">Title</label>
         <br>
+        <input type ="text" id="title" name="title" value="<%= todo.title %>" required>
         <br>
-        <label>Completed?</label>
-        <input type="checkbox" name="done" <% if (todo.done) { %>checked<% } %>> 
+        <label for="description">Description</label>
         <br>
+        <textarea id="description" name="description"><%= todo.description %></textarea>
+        <br>
+        <label for="done">Completed?</label>
+        <input type="checkbox" id="done" name="done" <% if (todo.done) { %>checked<% } %>> 
         <br>
         <button type="submit">Edit</button>
     </form>

@@ -27,7 +27,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // routes
 
-const todoRouter = require('./router/list');
+const todoRouter = require('./router/router');
 app.use('/', todoRouter);
 
 app.listen(port, () => {

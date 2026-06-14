@@ -9,7 +9,7 @@ function findItem(todos, itemId) {
     return result;
 }
 
-
+// main routes
 router.get('/', (req, res) => {
     let searchResult = null;
     let notFound = false; 
@@ -24,27 +24,25 @@ router.get('/', (req, res) => {
     res.render('todo-list', { todos, searchResult, notFound });
 })
 
-router.post('/', (req, res) => {
+// Add routes - side note, comes first since .post('/:id') would accept request first
+router.get('/add', (req, res) => {
+    res.render('add-todo')
+})
+
+router.post('/add', (req, res) => {
     const newTodo = {
         id: nextId,
         title: req.body.title,
         description: req.body.description,
-        done: false,
+        done: req.body.done 
     };
     nextId++;
     todos.push(newTodo);
     res.status(201).redirect('/')
 });
 
-router.get('/:id', (req, res) => {
-    const todo = findItem(todos, Number(req.params.id));
-    if (todo === undefined) {
-        res.send("Invalid ID");
-    } else {
-        res.json(todo);
-    }
-});
 
+// ID routes
 router.post('/:id', (req, res) => {
     const idDelete = Number(req.params.id);
     const todo = findItem(todos, idDelete);
@@ -56,6 +54,7 @@ router.post('/:id', (req, res) => {
     }
 });
 
+// Edit routes
 router.get('/edit/:id', (req, res) => {
     const todo = findItem(todos, Number(req.params.id));
     if (todo === undefined) {
@@ -74,8 +73,6 @@ router.post('/edit/:id', (req, res) => {
         todo.title = req.body.title;
         todo.description= req.body.description;
         req.body.done === undefined ? todo.done = undefined : todo.done = "on";
-        console.log(req.body.done)
-        console.log(todo)
         res.redirect('/');
     }
 })
