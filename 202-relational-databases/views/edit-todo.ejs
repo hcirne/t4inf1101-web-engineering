@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit To-do</title>
+</head>
+<body>
+    <form action="/edit/<%= todo.id %>" method="POST">
+        <b>ID: <%= todo.id %></b>
+        <p>Title</p>
+        <input type ="text" name="title" placeholder="<%= todo.title %>" required>
+        <p>Description</p>
+        <input type ="text" name="description" placeholder="<%= todo.description %>" required>
+        <br>
+        <br>
+        <label>Completed?</label>
+        <input type="checkbox" name="done" <% if (todo.done) { %>checked<% } %>> 
+        <br>
+        <br>
+        <button type="submit">Edit</button>
+    </form>
+</body>
+</html>
