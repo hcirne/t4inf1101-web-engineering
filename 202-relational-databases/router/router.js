@@ -24,11 +24,12 @@ router.get('/', (req, res) => {
     res.render('todo-list', { todos, searchResult, notFound });
 })
 
-// Add routes - side note, comes first since .post('/:id') would accept request first
+// Add routes 
 router.get('/add', (req, res) => {
     res.render('add-todo')
 })
 
+// Note: comes first since .post('/:id') would accept request first
 router.post('/add', (req, res) => {
     const newTodo = {
         id: nextId,
@@ -40,7 +41,6 @@ router.post('/add', (req, res) => {
     todos.push(newTodo);
     res.status(201).redirect('/')
 });
-
 
 // ID routes
 router.post('/:id', (req, res) => {
