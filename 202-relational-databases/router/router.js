@@ -1,28 +1,12 @@
 const express = require('express');
 const router = express.Router();
-let { todos } = require('../data.js')
-
-let nextId = 3;
+const connection = require('../utils/connection.js');
+const db = require('../utils/db.js');
 
 function findItem(todos, itemId) {
     const result = todos.find(t => t.id === itemId);
     return result;
 }
-
-// main routes
-router.get('/', (req, res) => {
-    let searchResult = null;
-    let notFound = false; 
-
-    if (req.query.id) {
-        const id = Number(req.query.id);
-        searchResult = findItem(todos, id);
-        if (searchResult === undefined) {
-            notFound = true;
-        }
-    }
-    res.render('todo-list', { todos, searchResult, notFound });
-})
 
 // Add routes 
 router.get('/add', (req, res) => {
@@ -31,50 +15,113 @@ router.get('/add', (req, res) => {
 
 // Note: comes first since .post('/:id') would accept request first
 router.post('/add', (req, res) => {
-    const newTodo = {
-        id: nextId,
-        title: req.body.title,
-        description: req.body.description,
-        done: req.body.done 
-    };
-    nextId++;
-    todos.push(newTodo);
-    res.status(201).redirect('/')
+const statusBool = req.body.status === "on" ? 1 : 0;
+    db.addTask(connection,
+        req.body.name,
+        req.body.description,
+        req.body.dueDate,
+        statusBool,
+        (err, results) => {
+            if (err) throw err;
+            res.redirect('/');
+        });
 });
 
-// ID routes
-router.post('/:id', (req, res) => {
+// delete routes - forms only accept get and post
+router.post('/delete/:id', (req, res) => {
     const idDelete = Number(req.params.id);
-    const todo = findItem(todos, idDelete);
-    if (todo === undefined) {
-        res.status(404).json({ message: "Invalid ID" }).redirect('/')
-    } else {
-        todos = todos.filter(t => t.id !== idDelete);
-        res.status(200).redirect('/');
-    }
+    
+    db.getTaskById(connection, idDelete, (err, results) => {
+        if (err) throw err;
+
+        if (results.length === 0) {
+            res.send("Invalid ID");
+        } else {
+            db.deleteTask(connection, idDelete, (err, results) => {
+                if (err) throw err;
+
+                res.redirect('/');
+            });
+        };
+    });
 });
 
 // Edit routes
 router.get('/edit/:id', (req, res) => {
-    const todo = findItem(todos, Number(req.params.id));
-    if (todo === undefined) {
-        res.send('Invalid ID');
-    } else {
-        res.render('edit-todo.ejs', {todo});
-    }
-})
+    const idEdit = Number(req.params.id);
+
+    db.getTaskById(connection, idEdit, (err, results) => {
+        if (err) throw err;
+
+        if (results.length === 0) {
+            res.send('Invalid ID');
+        } else {
+            let todo = results[0];
+            if (todo.due_date) {
+                const year = todo.due_date.getFullYear();
+                const month = String(todo.due_date.getMonth() + 1).padStart(2, '0');
+                const day = String(todo.due_date.getDate()).padStart(2, '0');
+                todo.due_date = `${year}-${month}-${day}`;
+            }
+            res.render('edit-todo', { todo });
+        }
+    });
+});
 
 router.post('/edit/:id', (req, res) => {
-    const idEdit = Number(req.params.id);
-    let todo = findItem(todos, idEdit);
-    if (todo === undefined) {
-        res.send('Invalid ID');
-    } else {
-        todo.title = req.body.title;
-        todo.description= req.body.description;
-        req.body.done === undefined ? todo.done = undefined : todo.done = "on";
+    const id = Number(req.params.id);
+    const taskName = req.body.name;
+    const taskDescription = req.body.description;
+    const dateValue = req.body.dueDate || null;
+    const status = req.body.status === 'on' ? 1 : 0;
+
+    db.updateTask(connection, id, taskName, taskDescription, dateValue , status, (err, r) => {
+        if (err) throw err;
         res.redirect('/');
-    }
+    })
 })
+
+
+router.get('/search', (req, res) => {
+    db.getAllTasks(connection, (err, tasks) => {
+        if (err) throw err;
+        
+        const id = Number(req.query.id);
+        let searchResult = null;
+        let notFound = false;
+        
+        if (isNaN(id) || id <= 0) {
+            notFound = true;
+            res.render('todo-list', { todos: tasks, searchResult, notFound });
+        } else {
+            db.getTaskById(connection, id, (err, results) => {
+                if (err) throw err;
+                
+                if (results.length > 0) {
+                    searchResult = results[0];
+                    // Format the date
+                    if (searchResult.due_date) {
+                        const year = searchResult.due_date.getFullYear();
+                        const month = String(searchResult.due_date.getMonth() + 1).padStart(2, '0');
+                        const day = String(searchResult.due_date.getDate()).padStart(2, '0');
+                        searchResult.due_date = `${year}-${month}-${day}`;
+                    }
+                } else {
+                    notFound = true;
+                }
+                
+                res.render('todo-list', { todos: tasks, searchResult, notFound });
+            });
+        };
+    });
+});
+
+// Display todo-list 
+router.get('/', (req, res) => {
+    db.getAllTasks(connection, (err, tasks) => {
+        if (err) throw err;
+        res.render('todo-list', { todos: tasks, searchResult: null, notFound: false });
+    });
+});
 
 module.exports = router;

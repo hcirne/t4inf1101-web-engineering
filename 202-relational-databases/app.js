@@ -3,6 +3,32 @@ const fs = require('fs');
 const path = require('path');
 const app = express();
 const port = 3000;
+const mysql = require('mysql2');
+const connection = require('./utils/connection.js');
+
+connection.connect((err) => {
+    if (err) {
+        console.error('Error connecting to the database: ' + err.stack);
+        return;
+    }
+
+    console.log('Connected to the database as id ' + connection.threadId);
+});
+
+function createTable(connection, queryString) {
+    const createTableQuery = `CREATE TABLE IF NOT EXISTS tasks (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255),
+        description VARCHAR(255),
+        due_date DATE,
+        status_bool BOOL)`;
+    connection.query(createTableQuery, (err, results) => {
+        if (err) throw err;
+        console.log('Table created');
+    });
+}
+
+createTable(connection)
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

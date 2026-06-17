@@ -11,43 +11,39 @@
         <% todos.forEach((todo)=> { %>
             <li>
                 <div>ID: <%= todo.id %> -
-                        <%= todo.title %>
-                            <% if (todo.done) { %>
+                        <%= todo.name %>
+                            <% if (todo.status_bool) { %>
                                 (Done)
                                 <% } %>
                                     <form action="/edit/<%= todo.id %>" method="GET" style="display:inline;">
                                         <button type="submit">Edit</button>
                                     </form>
-                                    <form action="/<%= todo.id %>" method="POST" style="display:inline;">
-                                        <button type="submit">Delete</button>
+                                    <form action="/delete/<%= todo.id %>" method="POST" style="display:inline;">
+                                        <!-- -->
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <button type="submit"name>Delete</button>
                                     </form>
                 </div>
             </li>
             <% }); %>
     </ul>
-    <form action="/" method="POST">
-        <input type="text" name="title" placeholder="Title" required>
-        <input type="text" name="description" placeholder="Description">
-        <button type="submit">Add</button>
-    </form>
-
 
     <h1>Search by ID</h1>
-    <form action="/" method="GET">
+    <form action="/search" method="GET">
         <input type="text" name="id" placeholder="ID" required>
         <button type="submit">Search</button>
     </form>
 
-    <% if (notFound) { %>
-        <p>Invalid ID</p>
-        <% } else if (searchResult) { %>
-            <p>Title: <%= searchResult.title %>
-            </p>
-            <p>Description: <%= searchResult.description %>
-            </p>
-            <p>Completed: <%= searchResult.done==="on" ? "Yes" : "No" %>
-            </p>
-            <% } %>
+    <% if (searchResult || notFound) { %>
+        <% if (notFound) { %>
+            <p>Invalid ID</p>
+        <% } else { %>
+            <p>Title: <%= searchResult.name%></p>
+            <p>Description: <%= searchResult.description %></p>
+            <p>Due Date: <%= searchResult.due_date %></p>
+            <p>Completed: <%= searchResult.status_bool ? "Yes" : "No" %></p>
+        <% } %>
+    <% } %>
 
     <h1>Add new to-do</h1>
     <form action="/add" method="GET">

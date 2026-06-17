@@ -1,25 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit To-Do</title>
 </head>
+
 <body>
     <form action="/edit/<%= todo.id %>" method="POST">
-        <h2>ID: <%= todo.id %></h2>
-        <label for="title">Title</label>
+        <h2>Edit To-Do | ID: <%= todo.id %>
+        </h2>
+        <label for="name">Name</label>
         <br>
-        <input type ="text" id="title" name="title" value="<%= todo.title %>" required>
+        <input type="text" id="name" name="name" value="<%= todo.name %>" required>
         <br>
         <label for="description">Description</label>
         <br>
         <textarea id="description" name="description"><%= todo.description %></textarea>
         <br>
-        <label for="done">Completed?</label>
-        <input type="checkbox" id="done" name="done" <% if (todo.done) { %>checked<% } %>> 
+        <label for="dueDate">Due Date</label>
+        <input type="date" id="dueDate" name="dueDate" value="<%= todo.due_date || '' %>">
         <br>
-        <button type="submit">Edit</button>
+        <label for="status">Completed?</label>
+        <input type="checkbox" id="status" name="status" <% if (todo.done) { %>checked<% } %>>
+            <br>
+            <button type="submit">Edit</button>
     </form>
 </body>
+
 </html>
